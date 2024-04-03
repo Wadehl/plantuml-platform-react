@@ -10,7 +10,7 @@ import { PUmlExtension } from "@sinm/monaco-plantuml";
 // encoding
 import * as encoder from "plantuml-encoder";
 
-import { debounce } from "@mui/material";
+import { debounce } from "lodash-es";
 
 function CodeInput() {
   const editorRef = useRef<HTMLTextAreaElement>(null);
@@ -38,7 +38,7 @@ function CodeInput() {
 
   return (
     <Editor
-      height="90vh"
+      className="w-full h-full"
       defaultLanguage="plantuml"
       defaultValue={codeString}
       onMount={handleEditorDisMount}
