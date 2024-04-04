@@ -6,15 +6,17 @@ import "./index.css";
 // unocss
 import "virtual:uno.css";
 
-// roboto font
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
+// 通用字体
+import 'vfonts/Roboto.css';
+// 等宽字体
+import 'vfonts/FiraCode.css';
 
 // monaco editor
 import {loader} from "@monaco-editor/react";
 import * as monaco from "monaco-editor";
+
+// store
+import {HoxRoot} from "hox";
 
 // you can change the source of the monaco files
 // loader.config({
@@ -25,10 +27,8 @@ import * as monaco from "monaco-editor";
 
 loader.config({monaco});
 
-import {CodingStoreProvider} from "./store";
-
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <CodingStoreProvider>
+  <HoxRoot>
     <App/>
-  </CodingStoreProvider>
+  </HoxRoot>
 );

@@ -1,15 +1,14 @@
 import "./App.css";
-
-import {useState, useEffect} from "react";
-
 // components
 import CodeInput from "./components/CodeInput.tsx";
 import ImageOutput from "./components/ImageOutput.tsx";
 
-import {Layout, ResizeBox, Switch} from '@arco-design/web-react';
+import {Layout, ResizeBox, Menu, List} from '@arco-design/web-react';
 
-// icons
-import {Moon, Sun} from '@icon-park/react';
+// store
+import {useConfigStore} from "./store";
+import NavBar from "./components/NavBar.tsx";
+import {useState} from "react";
 
 const {Header, Sider, Content} = Layout;
 
@@ -18,52 +17,49 @@ const layoutStyle = {
   background: 'var(--color-bg-1)'
 };
 
-type Direction = "horizontal" | "vertical" | "horizontal-reverse" | "vertical-reverse" | undefined;
+const layoutBarStyle = {
+  cursor: 'pointer',
+  height: '72px',
+  width: '32px',
+}
 
-const darkThemeMq = window.matchMedia("(prefers-color-scheme: dark)");
-
-darkThemeMq.addListener(e => {
-  if (e.matches) {
-    document.body.setAttribute('arco-theme', 'dark');
-  } else {
-    document.body.removeAttribute('arco-theme');
-  }
-});
+const barStyle = {
+  width: '4px',
+  borderRadius: '2px',
+  height: '76px',
+  backgroundColor: '#BFBFBF'
+}
 
 function App() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [direction] = useState<Direction>("horizontal");
+  const {config} = useConfigStore();
   
-  const handleChange = (val: boolean) => {
-    if (val) {
-      setTheme("dark");
-    } else {
-      setTheme("light");
-    }
-  }
-  
-  useEffect(() => {
-    if (theme === "dark") {
-      document.body.setAttribute('arco-theme', 'dark');
-    } else {
-      document.body.removeAttribute('arco-theme');
-    }
-  }, [theme]);
+  const [collapse, setCollapse] = useState(false);
   
   return (
     <Layout style={layoutStyle} className="w-screen h-screen overflow-auto box-border shadow-xl">
-      <Header style={{background: "var(--color-bg-1)"}} className="h-5vh w-90vw m-auto">
-        <div className="flex items-center justify-between container m-auto h-full">
-          <span className="text-violet-900 font-bold text-1.5rem ">PlantUML Platform React 🤩</span>
-          <div className="flex items-center justify-end w-fit ms-auto">
-            <Switch className="text-gray-900" checkedIcon={<Moon className="text-gray-900"/>}
-                    uncheckedIcon={<Sun className="text-gray-900"/>} onChange={handleChange}/>
-          </div>
-        </div>
+      <Header style={{background: 'var(--color-menu-light-bg)', borderColor: "rgba(255, 255, 255, 0.09)"}}
+              className="h-5vh w-100vw m-auto border-b border-b-solid">
+        <NavBar/>
       </Header>
       <Layout style={{background: "var(--color-bg-1)"}} className="h-95vh">
-        <Sider width="200px">
-        
+        <Sider width={collapse ? '0px' : '17.2rem'} className="me-2" style={{
+          transition: 'width 0.3s',
+        }}>
+          <Menu className="h-full relative overflow-x-hidden" collapse={collapse}>
+            <div className="box-border overflow-x-hidden overflow-y-auto w-full h-full p-2 flex flex-col items-center gap-.5rem">
+              <div className="sidebar-item"/>
+              <div className="sidebar-item"/>
+            </div>
+          </Menu>
+          <div
+            className="absolute cursor-pointer"
+            style={{top: "50%", right: "-2.5rem", transform: "translateY(-50%)"}}
+            onClick={() => setCollapse(!collapse)}
+          >
+            <div style={layoutBarStyle}>
+              <div style={barStyle}></div>
+            </div>
+          </div>
         </Sider>
         <Content className="h-full p-4 box-border">
           <ResizeBox.Split
@@ -71,7 +67,7 @@ function App() {
               <CodeInput/>,
               <ImageOutput/>
             ]}
-            direction={direction}
+            direction={config.direction}
             max={0.8}
             min={0.2}
             className="h-full w-full"
