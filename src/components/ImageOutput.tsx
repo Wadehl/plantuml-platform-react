@@ -2,7 +2,7 @@ import {useCodingStore, useConfigStore} from "../store";
 
 import {useMemo, useState} from "react";
 
-import {Image, Button, Dropdown, Menu, Space, Message} from '@arco-design/web-react';
+import {Image as ImageComponent, Button, Dropdown, Menu, Space, Message} from '@arco-design/web-react';
 
 type exportType = "SVG" | "PNG";
 
@@ -69,8 +69,31 @@ function ImageOutput() {
     setExportType(key as exportType);
   }
   
-  const onClickExport = (key: exportType | string) => {
+  const [downloadLoading, setDownloadLoading] = useState(false);
   
+  const onClickExport = async (key: exportType | string) => {
+    try {
+      setDownloadLoading(true);
+      if (key === '0') {
+        const split_url = svgUrl.split('/');
+        split_url[split_url.length - 2] = split_url[split_url.length - 2].replace('svg', 'png');
+        const url = split_url.join('/');
+        const blob = await fetch(url).then(res => res.blob());
+        const download_url = URL.createObjectURL(blob);
+        downloadFile(download_url, 'plantuml.png', 'image/png');
+      } else if (key === '1') {
+        const res = await fetch(svgUrl);
+        const svgString = await res.text();
+        // 转blob
+        const blob = new Blob([svgString], {type: 'image/svg+xml'});
+        const url = URL.createObjectURL(blob);
+        downloadFile(url, 'plantuml.svg');
+      } else if (key === '2') {
+        await downloadPng();
+      }
+    } finally {
+      setDownloadLoading(false);
+    }
   }
   
   const displayDropList = (
@@ -82,8 +105,9 @@ function ImageOutput() {
   
   const exportDropList = (
     <Menu onClickMenuItem={onClickExport}>
-      <Menu.Item key={'SVG'}>SVG转PNG下载</Menu.Item>
-      <Menu.Item key={'PNG'}>原生PNG下载</Menu.Item>
+      <Menu.Item key={'0'}>原生PNG下载</Menu.Item>
+      <Menu.Item key={'1'}>原生SVG下载</Menu.Item>
+      <Menu.Item key={'2'}>SVG转PNG下载</Menu.Item>
     </Menu>
   )
   
@@ -95,11 +119,11 @@ function ImageOutput() {
             <Button type="primary">{exportType}</Button>
           </Dropdown>
           <Dropdown droplist={exportDropList} trigger="hover">
-            <Button type="primary">下载</Button>
+            <Button type="primary" loading={downloadLoading}>下载</Button>
           </Dropdown>
         </Space>
       </div>
-      <Image className="top-6" width="100%" src={`${svgUrl}`}/>
+      <ImageComponent className="top-6" width="100%" src={`${svgUrl}`}/>
     </div>
   );
 }
