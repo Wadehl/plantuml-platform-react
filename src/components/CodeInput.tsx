@@ -82,11 +82,18 @@ function CodeInput() {
     setCodeString(newVal || '');
     const encodedString = encoder.encode(newVal as string);
     setEncodedString(encodedString);
+    updateTask(activeIndex, newVal || '');
   };
 
   const debouncedHandleEncode = debounce(handleEncode, 300);
 
-  const { codeString, setCodeString, setEncodedString } = useCodingStore();
+  const {
+    codeString,
+    setCodeString,
+    setEncodedString,
+    updateTask,
+    activeIndex
+  } = useCodingStore();
 
   return (
     <Editor
@@ -97,7 +104,7 @@ function CodeInput() {
           ? 'plantuml-theme-dark'
           : 'plantuml-theme'
       }
-      defaultValue={codeString}
+      value={codeString}
       beforeMount={handleBeforeMount}
       onMount={handleEditorDidMount}
       onChange={debouncedHandleEncode}
