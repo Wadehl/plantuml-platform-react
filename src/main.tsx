@@ -1,9 +1,9 @@
-import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
-import "./index.css";
+import ReactDOM from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
 
 // unocss
-import "virtual:uno.css";
+import 'virtual:uno.css';
 
 // 通用字体
 import 'vfonts/Roboto.css';
@@ -11,11 +11,11 @@ import 'vfonts/Roboto.css';
 import 'vfonts/FiraCode.css';
 
 // monaco editor
-import {loader} from "@monaco-editor/react";
-import * as monaco from "monaco-editor";
+import { loader } from '@monaco-editor/react';
+import * as monaco from 'monaco-editor';
 
 // store
-import {HoxRoot} from "hox";
+import { HoxRoot } from 'hox';
 
 // you can change the source of the monaco files
 // loader.config({
@@ -24,10 +24,10 @@ import {HoxRoot} from "hox";
 //   },
 // });
 
-loader.config({monaco});
+loader.config({ monaco });
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <HoxRoot>
-    <App/>
+    <App />
   </HoxRoot>
 );

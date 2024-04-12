@@ -16,7 +16,7 @@ import {useConfigStore} from "../store";
 
 function EmojiSwitch({handleChange, checked = false}: {
   checked?: boolean;
-  handleChange: (value: boolean, event: any) => void;
+  handleChange: (value: boolean, event: Event) => void;
 }) {
   return (
     <Switch
@@ -117,7 +117,7 @@ function SettingPanel({visible, setVisible}: {
         </TabPane>
         <TabPane title={"下载设置😶‍🌫️"} key={"2"}>
           <Popover content={
-            "PlantUML地址，用于图片服务，如：http://www.plantuml.com/plantuml/svg/[图片的hash]"
+            "PlantUML地址，用于图片服务，如：https://www.plantuml.com/plantuml/svg/[图片的hash]"
           } position={"left"}>
             <div className={"font-bold font-size-4 my-2 cursor-help"}>
               PlantUML设置 🤓
