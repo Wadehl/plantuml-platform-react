@@ -2,8 +2,9 @@ import './App.css';
 // components
 import CodeInput from './components/CodeInput.tsx';
 import ImageOutput from './components/ImageOutput.tsx';
+import MultiTask from './components/MultiTask.tsx';
 
-import { Layout, ResizeBox } from '@arco-design/web-react';
+import { Layout, ResizeBox, Menu } from '@arco-design/web-react';
 
 // store
 import { useConfigStore, useCodingStore } from './store';
@@ -67,24 +68,35 @@ function App() {
         <NavBar />
       </Header>
       <Layout style={{ background: 'var(--color-bg-1)' }} className="h-95vh">
-        {/*<Sider width={collapse ? '0px' : '17.2rem'} className="me-2" style={{*/}
-        {/*  transition: 'width 0.3s',*/}
-        {/*}}>*/}
-        {/*  <Menu className="h-full relative overflow-x-hidden" collapse={collapse}>*/}
-        {/*    <div className="box-border overflow-x-hidden overflow-y-auto w-full h-full p-2 flex flex-col items-center gap-.5rem">*/}
-        {/*    */}
-        {/*    </div>*/}
-        {/*  </Menu>*/}
-        {/*  <div*/}
-        {/*    className="absolute cursor-pointer"*/}
-        {/*    style={{top: "50%", right: "-2.5rem", transform: "translateY(-50%)"}}*/}
-        {/*    onClick={() => setCollapse(!collapse)}*/}
-        {/*  >*/}
-        {/*    <div style={layoutBarStyle}>*/}
-        {/*      <div style={barStyle}></div>*/}
-        {/*    </div>*/}
-        {/*  </div>*/}
-        {/*</Sider>*/}
+        <Sider
+          width={collapse ? '0px' : '17.2rem'}
+          className="me-2"
+          style={{
+            transition: 'width 0.3s'
+          }}
+        >
+          <Menu
+            className="h-full relative overflow-x-hidden"
+            collapse={collapse}
+          >
+            <div className="box-border overflow-x-hidden overflow-y-auto w-full h-full p-2 flex flex-col items-center gap-.5rem">
+              <MultiTask />
+            </div>
+          </Menu>
+          <div
+            className="absolute cursor-pointer"
+            style={{
+              top: '50%',
+              right: '-2.5rem',
+              transform: 'translateY(-50%)'
+            }}
+            onClick={() => setCollapse(!collapse)}
+          >
+            <div style={layoutBarStyle}>
+              <div style={barStyle}></div>
+            </div>
+          </div>
+        </Sider>
         <Content className="h-full p-4 box-border" ref={fullScreenRef}>
           <ResizeBox.Split
             panes={[<CodeInput />, <ImageOutput />]}
