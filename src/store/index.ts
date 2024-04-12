@@ -2,7 +2,10 @@ import { useState } from 'react';
 import { createGlobalStore } from 'hox';
 
 import { useDebounce } from 'react-use';
+import { cloneDeep } from 'lodash-es';
 import { Message } from '@arco-design/web-react';
+
+import plantUMLEncoder from 'plantuml-encoder';
 
 const saveToLocalStorage = (key: string, value: object | string | number) => {
   localStorage.setItem(key, JSON.stringify(value));
@@ -23,15 +26,80 @@ export const [useCodingStore, getCodingStore] = createGlobalStore(() => {
     'SoWkIImgAStDuNBAJrBGjLDmpCbCJbMmKiX8pSd9vuBmT87Y86cWQAR2X_bBfdCvfEQb03K10000'
   );
 
+  const [taskList, setTaskList] = useState([
+    {
+      code:
+        '@startuml\n' +
+        'Bob -> Alice : hello\n' +
+        'Alice --> Bob : hi 🤗\n' +
+        '@enduml',
+      encoded:
+        'SoWkIImgAStDuNBAJrBGjLDmpCbCJbMmKiX8pSd9vuBmT87Y86cWQAR2X_bBfdCvfEQb03K10000'
+    }
+  ]);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const addTask = (code: string) => {
+    const encoded = plantUMLEncoder.encode(code);
+    setTaskList([...taskList, { code, encoded }]);
+  };
+
+  const removeTask = (index: number) => {
+    if (taskList.length === 1) {
+      Message.warning('Cannot delete the last task');
+      return;
+    }
+    if (index === activeIndex) {
+      setActiveIndex(0);
+    }
+    taskList.splice(index, 1);
+    setTaskList([...taskList]);
+  };
+
+  const loadTask = (index: number) => {
+    setActiveIndex(index);
+    setCodeString(taskList[index].code);
+    setEncodedString(taskList[index].encoded);
+  };
+
+  const updateTask = (index: number, code: string) => {
+    const encoded = plantUMLEncoder.encode(code);
+    const _taskList = cloneDeep(taskList);
+    _taskList[index] = { code, encoded };
+    setTaskList(_taskList);
+  };
+
+  const clearTasks = (remainCurrent = false) => {
+    if (remainCurrent) {
+      setTaskList([taskList[activeIndex]]);
+      setActiveIndex(0);
+      return;
+    }
+    setTaskList([
+      {
+        code:
+          '@startuml\n' +
+          'Bob -> Alice : hello\n' +
+          'Alice --> Bob : hi 🤗\n' +
+          '@enduml',
+        encoded:
+          'SoWkIImgAStDuNBAJrBGjLDmpCbCJbMmKiX8pSd9vuBmT87Y86cWQAR2X_bBfdCvfEQb03K10000'
+      }
+    ]);
+    setActiveIndex(0);
+  };
+
   useDebounce(
     () => {
       saveToLocalStorage('coding', {
         codeString,
-        encodedString
+        encodedString,
+        taskList
       });
     },
     300,
-    [codeString, encodedString]
+    [codeString, encodedString, taskList]
   );
 
   const $load = () => {
@@ -48,6 +116,19 @@ export const [useCodingStore, getCodingStore] = createGlobalStore(() => {
         data.encodedString ||
           'SoWkIImgAStDuNBAJrBGjLDmpCbCJbMmKiX8pSd9vuBmT87Y86cWQAR2X_bBfdCvfEQb03K10000'
       );
+      setTaskList(
+        data.taskList || [
+          {
+            code:
+              '@startuml\n' +
+              'Bob -> Alice : hello\n' +
+              'Alice --> Bob : hi 🤗\n' +
+              '@enduml',
+            encoded:
+              'SoWkIImgAStDuNBAJrBGjLDmpCbCJbMmKiX8pSd9vuBmT87Y86cWQAR2X_bBfdCvfEQb03K10000'
+          }
+        ]
+      );
     }
   };
 
@@ -56,7 +137,14 @@ export const [useCodingStore, getCodingStore] = createGlobalStore(() => {
     setCodeString,
     encodedString,
     setEncodedString,
-    $load
+    $load,
+    taskList,
+    activeIndex,
+    addTask,
+    removeTask,
+    loadTask,
+    updateTask,
+    clearTasks
   };
 });
 
