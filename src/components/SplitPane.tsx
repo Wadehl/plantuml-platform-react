@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from 'react';
 
-const Split = ({ rate, direction = "horizontal", children }) => {
+const Split = ({ rate, direction = 'horizontal', children }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [initialPosition, setInitialPosition] = useState(null);
   const [currentRate, setRate] = useState(rate);
@@ -15,7 +15,7 @@ const Split = ({ rate, direction = "horizontal", children }) => {
 
       const containerRect = container.getBoundingClientRect();
       const newRate =
-        direction === "horizontal"
+        direction === 'horizontal'
           ? (event.clientX - containerRect.left) / containerRect.width
           : (event.clientY - containerRect.top) / containerRect.height;
 
@@ -27,57 +27,57 @@ const Split = ({ rate, direction = "horizontal", children }) => {
       setInitialPosition(null);
     };
 
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
 
     return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
     };
   }, [isDragging, direction, setRate]);
 
   const handleMouseDown = (event) => {
     setIsDragging(true);
     setInitialPosition(
-      direction === "horizontal" ? event.clientX : event.clientY
+      direction === 'horizontal' ? event.clientX : event.clientY
     );
   };
 
   const containerStyle = {
-    display: "flex",
-    position: "relative",
-    height: "100%",
-    width: "100%",
+    display: 'flex',
+    position: 'relative',
+    height: '100%',
+    width: '100%'
   };
 
   const splitLeftStyle = {
-    position: "relative",
-    width: direction === "horizontal" ? `${currentRate * 100}%` : "100%",
-    height: direction === "vertical" ? `${currentRate * 100}%` : "100%",
+    position: 'relative',
+    width: direction === 'horizontal' ? `${currentRate * 100}%` : '100%',
+    height: direction === 'vertical' ? `${currentRate * 100}%` : '100%'
   };
 
   const splitRightStyle = {
-    position: "relative",
+    position: 'relative',
     flex: 1,
-    overflow: "auto",
+    overflow: 'auto'
   };
 
   const dividerStyle = {
-    position: "absolute",
-    width: direction === "horizontal" ? "8px" : "100%",
-    height: direction === "vertical" ? "8px" : "100%",
+    position: 'absolute',
+    width: direction === 'horizontal' ? '8px' : '100%',
+    height: direction === 'vertical' ? '8px' : '100%',
     zIndex: 1,
-    backgroundColor: "#ccc",
-    cursor: direction === "horizontal" ? "col-resize" : "row-resize",
+    backgroundColor: '#ccc',
+    cursor: direction === 'horizontal' ? 'col-resize' : 'row-resize'
   };
 
   const [child1, child2] = React.Children.toArray(children);
   const splitPosition =
-    direction === "horizontal" ? `${currentRate * 100}%` : "100%";
+    direction === 'horizontal' ? `${currentRate * 100}%` : '100%';
   const dividerPosition =
-    direction === "horizontal"
-      ? { left: splitPosition, height: "100%", width: "8px" }
-      : { top: splitPosition, height: "8px", width: "100%" };
+    direction === 'horizontal'
+      ? { left: splitPosition, height: '100%', width: '8px' }
+      : { top: splitPosition, height: '8px', width: '100%' };
 
   return (
     <div ref={containerRef} style={containerStyle}>

@@ -1,19 +1,19 @@
-import "./App.css";
+import './App.css';
 // components
-import CodeInput from "./components/CodeInput.tsx";
-import ImageOutput from "./components/ImageOutput.tsx";
+import CodeInput from './components/CodeInput.tsx';
+import ImageOutput from './components/ImageOutput.tsx';
 
-import {Layout, ResizeBox} from '@arco-design/web-react';
+import { Layout, ResizeBox } from '@arco-design/web-react';
 
 // store
-import {useConfigStore, useCodingStore} from "./store";
-import NavBar from "./components/NavBar.tsx";
-import {useEffect, useRef, useState} from "react";
+import { useConfigStore, useCodingStore } from './store';
+import NavBar from './components/NavBar.tsx';
+import { useEffect, useRef, useState } from 'react';
 
 // hooks
-import {useFullscreen} from "react-use";
+import { useFullscreen } from 'react-use';
 
-const {Header, Sider, Content} = Layout;
+const { Header, Sider, Content } = Layout;
 
 const layoutStyle = {
   overflow: 'hidden',
@@ -23,42 +23,50 @@ const layoutStyle = {
 const layoutBarStyle = {
   cursor: 'pointer',
   height: '72px',
-  width: '32px',
-}
+  width: '32px'
+};
 
 const barStyle = {
   width: '4px',
   borderRadius: '2px',
   height: '76px',
   backgroundColor: '#BFBFBF'
-}
+};
 
 function App() {
-  const {config, show, toggle, $load} = useConfigStore();
-  const {$load: $loadCoding} = useCodingStore();
-  
+  const { config, show, toggle, $load } = useConfigStore();
+  const { $load: $loadCoding } = useCodingStore();
+
   useEffect(() => {
     $load();
     $loadCoding();
   }, []);
-  
+
   const [collapse, setCollapse] = useState(true);
-  
+
   const fullScreenRef = useRef(null);
-  
+
   useFullscreen(fullScreenRef, show, {
     onClose: () => {
       toggle(false);
     }
   });
-  
+
   return (
-    <Layout style={layoutStyle} className="w-screen h-screen overflow-auto box-border shadow-xl">
-      <Header style={{background: 'var(--color-menu-light-bg)', borderColor: "rgba(255, 255, 255, 0.09)"}}
-              className="h-5vh w-100vw m-auto border-b border-b-solid">
+    <Layout
+      style={layoutStyle}
+      className="w-screen h-screen overflow-auto box-border shadow-xl"
+    >
+      <Header
+        style={{
+          background: 'var(--color-menu-light-bg)',
+          borderColor: 'rgba(255, 255, 255, 0.09)'
+        }}
+        className="h-5vh w-100vw m-auto border-b border-b-solid"
+      >
         <NavBar />
       </Header>
-      <Layout style={{background: "var(--color-bg-1)"}} className="h-95vh">
+      <Layout style={{ background: 'var(--color-bg-1)' }} className="h-95vh">
         {/*<Sider width={collapse ? '0px' : '17.2rem'} className="me-2" style={{*/}
         {/*  transition: 'width 0.3s',*/}
         {/*}}>*/}
@@ -79,10 +87,7 @@ function App() {
         {/*</Sider>*/}
         <Content className="h-full p-4 box-border" ref={fullScreenRef}>
           <ResizeBox.Split
-            panes={[
-              <CodeInput/>,
-              <ImageOutput/>
-            ]}
+            panes={[<CodeInput />, <ImageOutput />]}
             direction={config.direction}
             max={0.8}
             min={0.2}

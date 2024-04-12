@@ -19,6 +19,7 @@
     "hox": "^2.1.1",
     "lodash-es": "^4.17.21",
     "plantuml-encoder": "^1.4.0",
+    "prettier": "^3.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-use": "^17.5.0",
@@ -34,9 +35,6 @@
     "@typescript-eslint/parser": "^7.2.0",
     "@unocss/postcss": "^0.59.0-beta.1",
     "@vitejs/plugin-react-swc": "^3.5.0",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.6",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
   }
